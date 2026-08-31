@@ -1,0 +1,66 @@
+{
+  "name": "@nam-digital-twins/terratile",
+  "version": "0.1.0",
+  "description": "Engine-agnostic runtime for 3D Tiles geospatial datasets, with a PlayCanvas integration",
+  "main": "src/index.mjs",
+  "exports": {
+    ".": "./src/index.mjs",
+    "./dist/terratile.js": "./dist/terratile.js",
+    "./package.json": "./package.json"
+  },
+  "unpkg": "dist/terratile.js",
+  "jsdelivr": "dist/terratile.js",
+  "scripts": {
+    "build": "rollup -c",
+    "lint": "eslint src integrations",
+    "docs": "typedoc",
+    "prepublishOnly": "npm run build",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nam-digital-twins/terratile.git"
+  },
+  "keywords": [
+    "terratile",
+    "geospatial",
+    "geolocation",
+    "gltf",
+    "google-maps",
+    "cesium-ion",
+    "3d-tiles",
+    "playcanvas",
+    "webgl",
+    "webgpu"
+  ],
+  "author": "Ioannis L. Tsampras <itsampras@ece.upatras.gr>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/nam-digital-twins/terratile/issues"
+  },
+  "homepage": "https://github.com/nam-digital-twins/terratile#readme",
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "integrations",
+    "src",
+    "NOTICE",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "devDependencies": {
+    "@playcanvas/eslint-config": "^2.1.0",
+    "@rollup/plugin-commonjs": "^28.0.6",
+    "@rollup/plugin-node-resolve": "^16.0.2",
+    "eslint": "^9.37.0",
+    "fake-indexeddb": "^6.2.5",
+    "globals": "^16.4.0",
+    "rollup": "^4.52.4",
+    "typedoc": "^0.28.20",
+    "typescript": "^6.0.3"
+  }
+}

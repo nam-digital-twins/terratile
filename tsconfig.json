@@ -1,0 +1,14 @@
+{
+  "//": "Used only by TypeDoc (npm run docs) to parse the JS sources. terratile ships no TypeScript; nothing is compiled.",
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": false,
+    "noEmit": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": false,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*.mjs"]
+}

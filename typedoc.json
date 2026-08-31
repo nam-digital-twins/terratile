@@ -1,0 +1,14 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["src/index.mjs"],
+  "entryPointStrategy": "resolve",
+  "tsconfig": "tsconfig.json",
+  "out": "api-docs",
+  "readme": "README.md",
+  "name": "terratile API reference",
+  "includeVersion": true,
+  "excludePrivate": true,
+  "excludeInternal": true,
+  "githubPages": true,
+  "hideGenerator": false
+}

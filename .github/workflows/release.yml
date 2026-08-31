@@ -1,0 +1,64 @@
+name: Publish to npm
+
+# Runs when a version tag (e.g. v0.1.0) is pushed. Builds and verifies the
+# package, then publishes to npm ONLY if an NPM_TOKEN repository secret is set.
+# Without that secret the publish step is skipped, so cutting a GitHub release
+# before you are ready to publish to npm is safe and the run stays green.
+#
+# To enable publishing later: add an npm "Automation" access token as the
+# NPM_TOKEN secret under Settings > Secrets and variables > Actions, then
+# re-run this workflow (or push the tag again).
+#
+# Guard: the tag must match the version in package.json.
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+  id-token: write   # enables npm publish --provenance
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+          cache: npm
+
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+
+      - name: Verify tag matches package.json version
+        run: |
+          PKG_VERSION="v$(node -p "require('./package.json').version")"
+          if [ "${GITHUB_REF_NAME}" != "$PKG_VERSION" ]; then
+            echo "Tag ${GITHUB_REF_NAME} does not match package.json ($PKG_VERSION)."
+            exit 1
+          fi
+
+      - name: Publish to npm
+        if: ${{ env.NPM_TOKEN != '' }}
+        run: |
+          NAME=$(node -p "require('./package.json').name")
+          VERSION=$(node -p "require('./package.json').version")
+          if npm view "$NAME@$VERSION" version >/dev/null 2>&1; then
+            echo "$NAME@$VERSION is already published; skipping."
+          else
+            npm publish --provenance --access public
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ env.NPM_TOKEN }}
+
+      - name: Skip publish (no NPM_TOKEN)
+        if: ${{ env.NPM_TOKEN == '' }}
+        run: echo "NPM_TOKEN is not set; skipping npm publish. Add the secret to enable publishing."

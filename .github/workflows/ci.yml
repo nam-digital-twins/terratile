@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+      # dist/terratile.js is committed; fail if the build output drifted from it.
+      - name: Check dist is up to date
+        run: git diff --exit-code -- dist/
+      # Ensure the API reference still generates (deployed by pages.yml).
+      - run: npm run docs

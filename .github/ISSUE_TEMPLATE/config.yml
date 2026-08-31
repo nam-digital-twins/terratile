@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and discussion
+    url: https://github.com/nam-digital-twins/terratile/discussions
+    about: Ask questions and share what you are building (enable Discussions in repo settings).
+  - name: Security report (private)
+    url: https://github.com/nam-digital-twins/terratile/security/advisories/new
+    about: Report a security vulnerability privately - do not open a public issue.

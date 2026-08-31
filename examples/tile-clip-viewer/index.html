@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>terratile - tile clip viewer</title>
+    <style>
+        html, body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+            color: #f5f7fa;
+            font-family: system-ui, sans-serif;
+        }
+
+        #application {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .panel {
+            position: fixed;
+            top: 12px;
+            left: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background: rgba(16, 24, 32, 0.82);
+            font-size: 13px;
+            line-height: 1.5;
+            z-index: 10;
+            max-width: 320px;
+        }
+
+        .panel strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .panel .row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-top: 3px;
+        }
+
+        .panel .row input[type="range"] {
+            width: 130px;
+        }
+
+        .panel select {
+            width: 100%;
+            margin-top: 5px;
+            padding: 4px;
+            border-radius: 4px;
+            border: 1px solid #3a4654;
+            background: #10181f;
+            color: #f5f7fa;
+            font-size: 12px;
+        }
+
+        .check-row {
+            display: block;
+            margin-top: 5px;
+            font-size: 12px;
+            color: #b8c2cc;
+        }
+
+        .check-row input {
+            vertical-align: middle;
+        }
+
+        .forget-btn {
+            margin-top: 6px;
+            padding: 4px 10px;
+            border-radius: 4px;
+            border: 1px solid #3a4654;
+            background: #1a232c;
+            color: #b8c2cc;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        .forget-btn:hover {
+            background: #243140;
+            color: #f5f7fa;
+        }
+
+        .geojson-row {
+            display: block;
+            margin-top: 6px;
+            font-size: 12px;
+            color: #b8c2cc;
+        }
+
+        #geojson-input {
+            display: block;
+            margin-top: 3px;
+            max-width: 100%;
+            font-size: 11px;
+            color: #f5f7fa;
+        }
+
+        #mode-button {
+            margin-top: 6px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 0;
+            background: #2f7fe0;
+            color: #fff;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        #key-form {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 20;
+        }
+
+        #key-form input,
+        #key-form select {
+            width: 340px;
+            max-width: 80vw;
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 1px solid #3a4654;
+            background: #10181f;
+            color: #f5f7fa;
+            font-size: 14px;
+        }
+
+        #key-form button {
+            padding: 8px 18px;
+            border-radius: 6px;
+            border: 0;
+            background: #2f7fe0;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        #key-form p {
+            max-width: 420px;
+            text-align: center;
+            color: #b8c2cc;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="application"></canvas>
+
+    <div class="panel">
+        <strong>terratile - tile clip viewer</strong>
+        <div id="status">Starting...</div>
+        <div>Tiles: <span id="tile-count">0</span></div>
+        <div class="row">
+            <label for="tile-limit">Tile limit: <span id="tile-limit-value">2000</span></label>
+            <input type="range" id="tile-limit" min="500" max="10000" step="100" value="2000">
+        </div>
+        <div class="row">
+            <label for="max-sse">Max SSE: <span id="max-sse-value">24</span></label>
+            <input type="range" id="max-sse" min="6" max="30" step="1" value="24">
+        </div>
+        <div class="row">
+            <label for="fly-speed">Fly speed: <span id="fly-speed-value">25</span></label>
+            <input type="range" id="fly-speed" min="5" max="200" step="5" value="25">
+        </div>
+        <select id="controller-select">
+            <option value="orbit" selected>Orbit (drag + wheel)</option>
+            <option value="fly">Fly (WASD + mouse)</option>
+        </select>
+        <label class="check-row"><input type="checkbox" id="stream-paused"> Lock streaming (freeze loaded tiles)</label>
+        <button id="mode-button" type="button">Mode: polygon crop</button>
+        <label class="geojson-row">Import crop polygon (GeoJSON):
+            <input type="file" id="geojson-input" accept=".geojson,.json,application/geo+json,application/json">
+        </label>
+        <div style="margin-top:5px;color:#b8c2cc" id="controls-hint">Left-drag pan &middot; right-drag orbit &middot; scroll zoom</div>
+        <button id="forget-cred" class="forget-btn" type="button">Forget credential</button>
+    </div>
+
+    <form id="key-form">
+        <strong>Choose a 3D Tiles provider</strong>
+        <select id="provider-select">
+            <option value="google">Google Photorealistic 3D Tiles - Google Maps API key</option>
+            <option value="cesium-ion">Cesium ion - access token (free account works)</option>
+        </select>
+        <input id="google-key" type="text" placeholder="Google Maps API key" autocomplete="off">
+        <input id="cesium-token" type="text" placeholder="Cesium ion access token" autocomplete="off" style="display:none">
+        <input id="cesium-asset" type="text" placeholder="Cesium ion asset ID" value="2275207" autocomplete="off" style="display:none">
+        <button type="submit">Start viewer</button>
+        <p>
+            Nothing is stored; the credential only goes to the provider you pick.
+            Cesium ion asset <code>2275207</code> is Google Photorealistic 3D Tiles
+            and works with a free Cesium ion account. You can also pass credentials
+            in the URL: <code>?key=GOOGLE_KEY</code>, or
+            <code>?provider=cesium-ion&amp;token=ION_TOKEN&amp;asset=2275207</code>.
+            See this example's README.
+        </p>
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/playcanvas@2.17.2/build/playcanvas.js"></script>
+    <script src="../../dist/terratile.js"></script>
+    <script src="../../integrations/playcanvas/streaming-tile-renderer.js"></script>
+    <script src="../../integrations/playcanvas/tile-clip.js"></script>
+    <script src="../../integrations/playcanvas/tile-displace.js"></script>
+    <script src="../shared/camera-controls.js"></script>
+    <script src="../shared/creds.js"></script>
+    <script src="./app.js"></script>
+</body>
+</html>

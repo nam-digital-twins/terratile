@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Terratile</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Terratile - an engine-agnostic runtime for streaming Photorealistic 3D Tiles into your apps, with a PlayCanvas integration.">
+<style>
+  :root {
+    --bg: #0b1411;
+    --bg2: #0f1a16;
+    --panel: #13201b;
+    --border: #25382f;
+    --text: #e9f3ee;
+    --muted: #9fb4ab;
+    --accent: #19b587;
+    --accent2: #3ddaa6;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background:
+      radial-gradient(1100px 520px at 50% -180px, rgba(25,181,135,0.22), transparent 70%),
+      linear-gradient(180deg, var(--bg2), var(--bg));
+    background-attachment: fixed;
+    color: var(--text);
+    font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+  }
+  a { color: var(--accent2); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 20px; }
+
+  header.hero { text-align: center; padding: 78px 20px 24px; }
+  .hero h1 {
+    font-size: clamp(44px, 9vw, 78px); margin: 0; letter-spacing: -1.5px; font-weight: 800;
+    color: var(--text);
+  }
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    .hero h1 {
+      background: linear-gradient(92deg, #ffffff, var(--accent2));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+  }
+  .hero .tag { color: var(--muted); font-size: clamp(16px, 2.6vw, 20px); margin: 12px auto 0; max-width: 620px; }
+  .badges { margin-top: 20px; display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .chip { font-size: 12px; color: var(--muted); border: 1px solid var(--border); border-radius: 999px; padding: 5px 11px; background: rgba(255,255,255,0.02); }
+
+  .cta { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin: 28px 0 4px; }
+  .btn { display: inline-block; padding: 11px 18px; border-radius: 10px; font-weight: 600; border: 1px solid var(--border); color: var(--text); background: rgba(255,255,255,0.03); }
+  .btn:hover { border-color: var(--accent); text-decoration: none; }
+  .btn.primary { background: linear-gradient(92deg, var(--accent), var(--accent2)); color: #04120d; border: 0; }
+
+  .shot { margin: 36px auto 6px; max-width: 900px; }
+  .shot img { width: 100%; display: block; border-radius: 14px; border: 1px solid var(--border); box-shadow: 0 28px 70px rgba(0,0,0,0.55); }
+  .shot .cap { text-align: center; color: var(--muted); font-size: 13px; margin-top: 12px; }
+
+  section { padding: 36px 0; }
+  h2 { font-size: 22px; margin: 0 0 18px; }
+
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+  .feat { border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; background: var(--panel); }
+  .feat h3 { margin: 0 0 6px; font-size: 15px; }
+  .feat p { margin: 0; color: var(--muted); font-size: 14px; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .card { border: 1px solid var(--border); border-radius: 14px; padding: 22px; background: var(--panel); transition: border-color .15s ease, transform .15s ease; }
+  .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .card h3 { margin: 0 0 8px; font-size: 18px; }
+  .card p { margin: 0 0 16px; color: var(--muted); font-size: 14px; }
+
+  .note { color: var(--muted); font-size: 14px; }
+  code { background: rgba(255,255,255,0.07); padding: 3px 7px; border-radius: 6px; font-size: 13px; }
+
+  footer { border-top: 1px solid var(--border); margin-top: 24px; padding: 28px 20px 52px; color: var(--muted); font-size: 13px; text-align: center; }
+  footer a { color: var(--muted); }
+  footer .links { margin-top: 8px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <h1>Terratile</h1>
+      <p class="tag">3D Maps for your Apps. An engine-agnostic runtime for streaming Photorealistic 3D Tiles, with a PlayCanvas integration.</p>
+      <div class="badges">
+        <span class="chip">Apache-2.0</span>
+        <span class="chip">@nam-digital-twins/terratile</span>
+        <span class="chip">PlayCanvas</span>
+        <span class="chip">beta</span>
+      </div>
+      <div class="cta">
+        <a class="btn primary" href="examples/basic-viewer/">View live demo</a>
+        <a class="btn" href="docs/">API reference</a>
+        <a class="btn" href="https://github.com/nam-digital-twins/terratile">GitHub</a>
+        <a class="btn" href="https://www.npmjs.com/package/@nam-digital-twins/terratile">npm</a>
+      </div>
+    </header>
+
+    <div class="shot">
+      <img src="images/terratile-demo.gif" alt="Terratile streaming Photorealistic 3D Tiles" loading="lazy">
+      <div class="cap">Live tile streaming with smooth, hole-free refinement.</div>
+    </div>
+
+    <section>
+      <h2>Features</h2>
+      <div class="features">
+        <div class="feat"><h3>Any 3D Tiles source</h3><p>Google Photorealistic 3D Tiles, Cesium ion, or tileset URLs through one interface.</p></div>
+        <div class="feat"><h3>Smooth streaming</h3><p>Atomic refinement with a dither cross-fade. Detail sharpens as you move, without holes.</p></div>
+        <div class="feat"><h3>PlayCanvas integration</h3><p>Drop tiles into your scene, anchored to a real-world location, with one script.</p></div>
+        <div class="feat"><h3>Ground snapping</h3><p>Keep your entities glued to the tile surface as it refines and reloads.</p></div>
+        <div class="feat"><h3>Clipping and cutouts</h3><p>Crop tiles to a polygon or punch holes in them, with smooth shader edges.</p></div>
+        <div class="feat"><h3>Tile caching</h3><p>In-memory and optional persistent cache for fast revisits.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Live demos</h2>
+      <div class="cards">
+        <div class="card">
+          <h3>Basic viewer</h3>
+          <p>Tile streaming plus ground snapping, with walker entities riding the surface as it refines.</p>
+          <a class="btn" href="examples/basic-viewer/">Open demo</a>
+        </div>
+        <div class="card">
+          <h3>Tile-clip viewer</h3>
+          <p>Crop tiles to a polygon with a circular hole (a donut), or punch circular and polygonal cutouts.</p>
+          <a class="btn" href="examples/tile-clip-viewer/">Open demo</a>
+        </div>
+      </div>
+      <p class="note" style="margin-top:16px;">Each demo needs a Google Maps API key or a free Cesium ion token, entered on the page.</p>
+    </section>
+
+    <section>
+      <h2>Install</h2>
+      <p class="note"><code>npm install @nam-digital-twins/terratile</code></p>
+    </section>
+  </div>
+
+  <footer>
+    Terratile is licensed under Apache-2.0. Built by Ioannis L. Tsampras, NAM Research Group, ECE Dept., University of Patras.
+    <div class="links">
+      <a href="https://github.com/nam-digital-twins/terratile">Source</a> &middot;
+      <a href="docs/">Docs</a> &middot;
+      <a href="https://www.npmjs.com/package/@nam-digital-twins/terratile">npm</a>
+    </div>
+  </footer>
+</body>
+</html>

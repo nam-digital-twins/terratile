@@ -1,0 +1,17 @@
+terratile
+Copyright 2026 Ioannis L. Tsampras
+NAM Research Group, ECE Dept., University of Patras
+Contact: itsampras@ece.upatras.gr
+
+Licensed under the Apache License, Version 2.0 (see the LICENSE file). If you
+redistribute terratile or a Derivative Work of it, retain the attribution above
+per Section 4 of the License. No visible or on-screen credit is required.
+
+This product includes third-party open-source components. Their full license
+texts are in THIRD_PARTY_NOTICES.md:
+
+* earthatile - Copyright (c) 2023 PlayCanvas - MIT License.
+* PCUI - Copyright (c) PlayCanvas Ltd - MIT License
+  (integrations/playcanvas/pcui-5.2.3.min.js).
+* Draco 3D Data Compression - Copyright The Draco Authors - Apache License 2.0
+  (examples/**/draco.wasm.*).
